@@ -1,20 +1,21 @@
-<script type="module">
-  /*
-    Add these two public values from Supabase: Project Settings > API.
-    Never put your sb_secret/service_role key in this file or any browser code.
-  */
+// ==========================================
+// INNER CIRCLE - SUPABASE CONFIGURATION
+// ==========================================
 
-  window.SUPABASE_URL = "https://jqfyqbbusarolwystrta.supabase.co";
-  window.SUPABASE_PUBLISHABLE_KEY = "sb_publishable_rxAnVVyiypshAFpK6jPjBg_WVVfX8rW";
+// Your Supabase Project URL (NO /rest/v1/)
+const SUPABASE_URL = "https://jqfyqbbusarolwystrta.supabase.co";
 
-  // For safety, use correct URL format (no /rest/v1/ in the base URL)
-  if (
-    !window.SUPABASE_URL.startsWith("YOUR_") &&
-    !window.SUPABASE_PUBLISHABLE_KEY.startsWith("YOUR_")
-  ) {
-    window.supabaseClient = window.supabase.createClient(
-      window.SUPABASE_URL,
-      window.SUPABASE_PUBLISHABLE_KEY
-    );
-  }
-</script>
+// Your Publishable (Anon) Key
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_rxAnVVyiypshAFpK6jPjBg_WVVfX8rW";
+
+// Create Supabase Client
+window.supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+// Optional: Make globally accessible
+window.SUPABASE_URL = SUPABASE_URL;
+window.SUPABASE_PUBLISHABLE_KEY = SUPABASE_PUBLISHABLE_KEY;
+
+console.log("✅ Inner Circle connected to Supabase successfully.");
