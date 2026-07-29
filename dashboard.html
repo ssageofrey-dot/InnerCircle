@@ -5,3 +5,30 @@
 <section class="summary-grid"><article><span>YOUR MONTHLY CONTRIBUTION</span><strong>UGX 20,000</strong><small>Due by the end of each month</small></article><article><span>CONTRIBUTION STATUS</span><strong class="status" id="contribution-status">Loading...</strong><small id="status-note">Checking your payment record</small></article><article><span>YOUR SAVINGS BALANCE</span><strong id="savings-balance">UGX 20000</strong><small>Verified contributions to date</small></article></section>
 <section class="dashboard-section"><div><span class="eyebrow">NEXT STEP</span><h2>Make your monthly contribution</h2><p>Use the group’s agreed payment method (Mobile money: 0772796872 - SEGUJJA AHMED BATANDA), then notify the admin so it can be verified and added to your account.</p></div><a class="button" href="mailto:ssageofrey@gmail.com?subject=Contribution%20confirmation">Notify Admin</a></section>
 <section class="dashboard-section contribution-table"><div><h2>Contribution history</h2><p>Only verified payments are included in your balance.</p></div><div class="table-wrap"><table><thead><tr><th>Month</th><th>Amount</th><th>Status</th><th>Recorded</th></tr></thead><tbody id="contribution-list"><tr><td colspan="4" class="empty-state">Loading contribution history...</td></tr></tbody></table></div></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script></body></html>
+<section class="dashboard-section contribution-table">
+    <div>
+        <h2>Group Contribution Status</h2>
+        <p>Overview of members who have paid and those who have not paid for the current month.</p>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Member ID</th>
+                    <th>Contribution</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="group-contribution-list">
+                <tr>
+                    <td colspan="4" class="empty-state">
+                        Loading member contribution status...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
