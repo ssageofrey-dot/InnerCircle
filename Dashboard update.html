@@ -1,0 +1,131 @@
+// ===============================
+// DASHBOARD AUTO UPDATE
+// ===============================
+
+async function updateDashboard(memberId) {
+    const currentMonth = new Date().toISOString().slice(0, 7) + "-01";
+
+    // Get this month's contribution
+    const { data: currentContribution, error: currentError } =
+        await window.supabaseClient
+            .from("contributions")
+            .select("*")
+            .eq("member_id", memberId)
+            .eq("contribution_month", currentMonth)
+            .maybeSingle();
+
+    if (currentError) {
+        console.error(currentError);
+    }
+
+    const statusElement = document.getElementById("contribution-status");
+    const noteElement = document.getElementById("status-note");
+
+    if (currentContribution) {
+
+        if (currentContribution.status === "verified") {
+
+            statusElement.textContent = "Verified";
+            statusElement.style.color = "#0f9d58";
+
+            noteElement.textContent = "Your contribution has been verified.";
+
+        } else {
+
+            statusElement.textContent = "Pending";
+            statusElement.style.color = "#f4b400";
+
+            noteElement.textContent = "Waiting for admin verification.";
+
+        }
+
+    } else {
+
+        statusElement.textContent = "Not recorded";
+        statusElement.style.color = "#d93025";
+
+        noteElement.textContent = "No contribution recorded this month.";
+
+    }
+
+    // ===============================
+    // Calculate Savings Balance
+    // ===============================
+
+    const { data: verifiedContributions, error: balanceError } =
+        await window.supabaseClient
+            .from("contributions")
+            .select("amount")
+            .eq("member_id", memberId)
+            .eq("status", "verified");
+
+    if (balanceError) {
+        console.error(balanceError);
+    }
+
+    let total = 0;
+
+    if (verifiedContributions) {
+        verifiedContributions.forEach(item => {
+            total += Number(item.amount);
+        });
+    }
+
+    document.getElementById("savings-balance").textContent =
+        "UGX " + total.toLocaleString();
+
+    // ===============================
+    // Contribution History
+    // ===============================
+
+    const { data: history, error: historyError } =
+        await window.supabaseClient
+            .from("contributions")
+            .select("*")
+            .eq("member_id", memberId)
+            .order("contribution_month", { ascending: false });
+
+    if (historyError) {
+        console.error(historyError);
+    }
+
+    const tbody = document.getElementById("contribution-list");
+
+    tbody.innerHTML = "";
+
+    if (!history || history.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="empty-state">
+                    No contribution history found.
+                </td>
+            </tr>
+        `;
+
+    } else {
+
+        history.forEach(item => {
+
+            const month = new Date(item.contribution_month)
+                .toLocaleDateString("en-GB", {
+                    month: "short",
+                    year: "numeric"
+                });
+
+            const recorded = new Date(item.created_at)
+                .toLocaleDateString("en-GB");
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${month}</td>
+                    <td>UGX ${Number(item.amount).toLocaleString()}</td>
+                    <td>${item.status}</td>
+                    <td>${recorded}</td>
+                </tr>
+            `;
+
+        });
+
+    }
+}
